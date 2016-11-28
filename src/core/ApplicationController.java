@@ -71,6 +71,11 @@ class ApplicationController
 		{
 			if ( mUserInputQueue.isEmpty() )
 			{
+				// check if no longer running
+				if(!running)
+				{
+					return;
+				}
 				try
 				{
 					Thread.sleep( 666 );
