@@ -1,3 +1,5 @@
+package core;
+
 import net.NetModule;
 
 import java.util.ArrayList;
@@ -94,6 +96,9 @@ class ApplicationController
 	public
 	void handleInput( String input )
 	{
+		ModuleLocator
+			moduleLocator
+			= ModuleLocator.getInstance();
 		if ( input == null )
 		{
 			return;
@@ -109,7 +114,7 @@ class ApplicationController
 		switch ( inputTokens[ 0 ] )
 		{
 			case "stop":
-				mClientApplication.stopApplication();
+				stop();
 				break;
 			case "connect":
 				if ( inputTokens.length
@@ -125,7 +130,7 @@ class ApplicationController
 				{
 					NetModule
 						netModule
-						= mClientApplication.getNetModule();
+						= (NetModule) moduleLocator.getModule( "net" );
 					String
 						hostName
 						= inputTokens[ 1 ];
@@ -201,5 +206,6 @@ class ApplicationController
 	{
 		running
 			= false;
+		mClientApplication.stopApplication();
 	}
 }

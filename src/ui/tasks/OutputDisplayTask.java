@@ -45,6 +45,12 @@ class OutputDisplayTask
 	}
 
 	public
+	List<String> getOutputQueue()
+	{
+		return mOutputQueue;
+	}
+
+	public
 	void setOutputQueue( List<String> outputQueue )
 	{
 		mOutputQueue

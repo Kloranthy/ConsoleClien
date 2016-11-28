@@ -9,21 +9,27 @@ class InputRetrievalTask
 	implements Runnable
 {
 	/**
-	 * scanner used to retrieve user input from the command line.
+	 * mScanner used to retrieve user input from the command line.
 	 */
 	private Scanner
-		scanner;
+		mScanner;
+	/**
+	 * crappy pseudo state
+	 */
 	private boolean
-		running;
+		mRunning;
+	/**
+	 * queue containing retrieved user input
+	 */
 	private
 	List<String>
-		inputQueue;
+		mInputQueue;
 
 
 	public
 	InputRetrievalTask()
 	{
-		inputQueue
+		mInputQueue
 			= new LinkedList<String>();
 	}
 
@@ -31,15 +37,15 @@ class InputRetrievalTask
 	public
 	void run()
 	{
-		running
+		mRunning
 			= true;
-		while ( running )
+		while ( mRunning )
 		{
 			try
 			{
 				String
 					input
-					= scanner.nextLine();
+					= mScanner.nextLine();
 				if ( input
 				     == null )
 				{
@@ -51,7 +57,7 @@ class InputRetrievalTask
 				}
 				else
 				{
-					inputQueue.add( input );
+					mInputQueue.add( input );
 				}
 			}
 			catch ( Exception e )
@@ -64,21 +70,27 @@ class InputRetrievalTask
 	public
 	void stop()
 	{
-		running
+		mRunning
 			= false;
 	}
 
 	public
 	void setScanner( Scanner scanner )
 	{
-		this.scanner
+		this.mScanner
 			= scanner;
+	}
+
+	public
+	List<String> getInputQueue()
+	{
+		return mInputQueue;
 	}
 
 	public
 	void setInputQueue( List<String> inputQueue )
 	{
-		this.inputQueue
+		this.mInputQueue
 			= inputQueue;
 	}
 }

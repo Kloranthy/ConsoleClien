@@ -1,7 +1,8 @@
 package execution;
 
-import java.util.LinkedList;
-import java.util.List;
+import abstractions.Module;
+import log.LogModule;
+
 /**
  * a simple execution module that will be used to contain all
  * things thread related.
@@ -11,29 +12,46 @@ import java.util.List;
  */
 public
 class ExecutionModule
+	extends Module
 {
-	private List<Runnable>
-		mTasks;
-	private List<Thread>
-		mThreads;
+	/**
+	 * crappy pseudo state variable
+	 */
+	private boolean
+		running;
 
 	public
 	ExecutionModule()
 	{
-		mTasks
-			= new LinkedList<Runnable>();
-		mThreads
-			= new LinkedList<Thread>();
+		super( "execution" );
+		String
+			logMessage
+			= "constructor called";
+		LogModule.log(
+			getName(),
+			logMessage );
 	}
 
 	public
 	void execute( Runnable task )
 	{
-		mTasks.add( task );
-		Thread
-			thread
-			= new Thread( task );
-		mThreads.add( thread );
-		thread.start();
+		// TODO: check if running? might interfere with shutdown
+		new Thread( task ).start();
+	}
+
+	@Override
+	public
+	void start()
+	{
+		running
+			= true;
+	}
+
+	@Override
+	public
+	void stop()
+	{
+		running
+			= false;
 	}
 }
