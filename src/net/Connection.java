@@ -26,12 +26,12 @@ class Connection
 		{
 			mNetOut
 				= new DataOutputStream(
-					                      socket.getOutputStream()
+				socket.getOutputStream()
 			);
 			mNetIn
 				= new DataInputStream(
-												socket
-				                        .getInputStream()
+				socket
+					.getInputStream()
 			);
 		}
 		catch ( IOException e )
@@ -40,7 +40,8 @@ class Connection
 		}
 	}
 
-	public void send(String out)
+	public
+	void send( String out )
 	{
 		try
 		{
@@ -52,12 +53,16 @@ class Connection
 		}
 	}
 
-	public String receive()
+	public
+	String receive()
 	{
-		String in = "";
+		String
+			in
+			= "";
 		try
 		{
-			in = mNetIn.readUTF();
+			in
+				= mNetIn.readUTF();
 		}
 		catch ( IOException e )
 		{
@@ -66,7 +71,8 @@ class Connection
 		return in;
 	}
 
-	public void close()
+	public
+	void close()
 	{
 		try
 		{

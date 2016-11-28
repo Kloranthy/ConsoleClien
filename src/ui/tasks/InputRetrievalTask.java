@@ -9,8 +9,7 @@ class InputRetrievalTask
 	implements Runnable
 {
 	/**
-	 * scanner used to retrieve user input from
-	 * the command line.
+	 * scanner used to retrieve user input from the command line.
 	 */
 	private Scanner
 		scanner;
@@ -36,16 +35,37 @@ class InputRetrievalTask
 			= true;
 		while ( running )
 		{
-			if ( scanner.hasNext() )
+			try
 			{
-				inputQueue.add( scanner.nextLine() );
+				String
+					input
+					= scanner.nextLine();
+				if ( input
+				     == null )
+				{
+					continue;
+				}
+				else if ( input.isEmpty() )
+				{
+					continue;
+				}
+				else
+				{
+					inputQueue.add( input );
+				}
+			}
+			catch ( Exception e )
+			{
+				e.printStackTrace();
 			}
 		}
 	}
 
-	public void stop()
+	public
+	void stop()
 	{
-		running = false;
+		running
+			= false;
 	}
 
 	public

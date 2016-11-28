@@ -53,7 +53,6 @@ class NetModule
 	}
 
 
-
 	public
 	void setNetInQueue( List<String> netInQueue )
 	{
@@ -68,43 +67,27 @@ class NetModule
 			= netOutQueue;
 	}
 
-	public void startTasks()
+	public
+	boolean isConnected()
 	{
-		// create the net reader task and initialize it
-		mNetReaderTask = new NetReaderTask();
-		mNetReaderTask.setNetInQueue( mNetInQueue );
-		//mNetReaderTask.setConnection(  );
-		// create the net writer task and initialize it
-		mNetWriterTask = new NetWriterTask();
-		mNetWriterTask.setNetOutQueue( mNetOutQueue );
-		//mNetWriterTask.setConnection(  );
-		// create the threads that will run the ui.tasks
-		mNetInThread = new Thread( mNetReaderTask );
-		mNetOutThread = new Thread( mNetWriterTask );
-		// start the threads
-		mNetInThread.start();
-		mNetOutThread.start();
-	}
-
-	public boolean isConnected()
-	{
-		return mConnection != null;
+		return mConnection
+		       != null;
 	}
 
 	public
 	boolean connectToServer(
-		                    String hostName,
-		                    int portNumber
-	                    )
+		String hostName,
+		int portNumber
+	                       )
 	{
 		try
 		{
 			mConnection
 				= new Connection(
-					                new Socket(
-						                          hostName,
-						                          portNumber
-					                )
+				new Socket(
+					hostName,
+					portNumber
+				)
 			);
 			return true;
 		}
@@ -117,13 +100,15 @@ class NetModule
 
 	/**
 	 * TODO replace this with Brian's fancy auth stuff
+	 *
 	 * @param userName
 	 * @param password
 	 */
-	public void login(
-							  String userName,
-	                    String password
-	                 )
+	public
+	void login(
+		String userName,
+		String password
+	          )
 	{
 		// login task goes here
 	}
@@ -131,8 +116,40 @@ class NetModule
 	public
 	void disconnectFromServer()
 	{
-		// tell server that client is disconnecting
+		// TODO tell server that client is disconnecting
+		stopConnectionTasks();
 		mConnection.close();
-		mConnection = null;
+		mConnection
+			= null;
+	}
+
+	private
+	void stopConnectionTasks()
+	{
+		mNetReaderTask.stop();
+		mNetWriterTask.stop();
+	}
+
+	private
+	void startConnectionTasks()
+	{
+		// create the net reader task and initialize it
+		mNetReaderTask
+			= new NetReaderTask();
+		mNetReaderTask.setNetInQueue( mNetInQueue );
+		mNetReaderTask.setConnection( mConnection );
+		// create the net writer task and initialize it
+		mNetWriterTask
+			= new NetWriterTask();
+		mNetWriterTask.setNetOutQueue( mNetOutQueue );
+		mNetWriterTask.setConnection( mConnection );
+		// create the threads that will run the ui.tasks
+		mNetInThread
+			= new Thread( mNetReaderTask );
+		mNetOutThread
+			= new Thread( mNetWriterTask );
+		// start the threads
+		mNetInThread.start();
+		mNetOutThread.start();
 	}
 }

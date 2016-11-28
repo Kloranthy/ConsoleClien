@@ -7,21 +7,24 @@ public
 class NetWriterTask
 	implements Runnable
 {
-	private boolean running;
+	private boolean
+		running;
 	private
 	List<String>
-		        mNetOutQueue;
+		mNetOutQueue;
 	private
-	Connection mConnection;
+	Connection
+		mConnection;
 
 	@Override
 	public
 	void run()
 	{
-		running = true;
+		running
+			= true;
 		while ( running )
 		{
-			if( mNetOutQueue.isEmpty())
+			if ( mNetOutQueue.isEmpty() )
 			{
 				try
 				{
@@ -39,9 +42,11 @@ class NetWriterTask
 		}
 	}
 
-	public void stop()
+	public
+	void stop()
 	{
-		running = false;
+		running
+			= false;
 	}
 
 	public
@@ -51,8 +56,10 @@ class NetWriterTask
 			= netOutQueue;
 	}
 
-	public void setConnection( Connection connection)
+	public
+	void setConnection( Connection connection )
 	{
-		mConnection = connection;
+		mConnection
+			= connection;
 	}
 }

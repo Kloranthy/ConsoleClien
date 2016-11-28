@@ -1,12 +1,22 @@
+import net.NetModule;
+
 import java.util.ArrayList;
 import java.util.List;
 public
 class ApplicationController
+	implements Runnable
 {
+
+	/**
+	 * crappy pseudo state variable
+	 */
+	private boolean
+		running;
 	/**
 	 * the application being controlled
 	 */
-	private ClientApplication mClientApplication;
+	private ClientApplication
+		mClientApplication;
 	/**
 	 * queue of user input
 	 */
@@ -23,18 +33,23 @@ class ApplicationController
 	/**
 	 * constructor
 	 *
-	 * @param clientApplication the application to be controlled
+	 * @param clientApplication
+	 * 	the application to be controlled
 	 */
-	public ApplicationController( ClientApplication clientApplication )
+	public
+	ApplicationController( ClientApplication clientApplication )
 	{
-		mClientApplication = clientApplication;
+		mClientApplication
+			= clientApplication;
 	}
 
-	public void setUserInputQueue(
-		                             List<String> userInputQueue
-	                             )
+	public
+	void setUserInputQueue(
+		List<String> userInputQueue
+	                      )
 	{
-		mUserInputQueue = userInputQueue;
+		mUserInputQueue
+			= userInputQueue;
 	}
 
 	public
@@ -44,45 +59,130 @@ class ApplicationController
 			= outputQueue;
 	}
 
-	/**
-	 *
-	 * @param input the line of input to be processed
-	 */
-	public void handleInput(String input)
+	@Override
+	public
+	void run()
 	{
-		String[] inputTokens = parseInput(input);
-		switch ( inputTokens[0] )
+		running
+			= true;
+		while ( running )
 		{
-			case "stop" :
+			if ( mUserInputQueue.isEmpty() )
+			{
+				try
+				{
+					Thread.sleep( 666 );
+				}
+				catch ( InterruptedException e )
+				{
+					e.printStackTrace();
+				}
+			}
+			else
+			{
+				handleInput(
+					mUserInputQueue.remove( 0 )
+				           );
+			}
+		}
+	}
+
+	/**
+	 * @param input
+	 * 	the line of input to be processed
+	 */
+	public
+	void handleInput( String input )
+	{
+		if ( input == null )
+		{
+			return;
+		}
+		input.trim();
+		if ( input.isEmpty() )
+		{
+			return;
+		}
+		String[]
+			inputTokens
+			= parseInput( input );
+		switch ( inputTokens[ 0 ] )
+		{
+			case "stop":
 				mClientApplication.stopApplication();
 				break;
 			case "connect":
-				if(inputTokens.length != 3)
+				if ( inputTokens.length
+				     != 3 )
 				{
-					String msg = "usage: connect <hostName> <portNumber>";
+					String
+						msg
+						= "usage: connect <hostName> <portNumber>";
 					mOutputQueue.add( msg );
 					return;
 				}
 				else
 				{
-					// get net module
-					//
+					NetModule
+						netModule
+						= mClientApplication.getNetModule();
+					String
+						hostName
+						= inputTokens[ 1 ];
+					int
+						portNumber
+						= Integer.parseInt( inputTokens[ 2 ] );
+					boolean
+						connected
+						= netModule.connectToServer(
+						hostName,
+						portNumber
+						                           );
+					if ( connected )
+					{
+						String
+							msg
+							= "successfully connected to server";
+						mOutputQueue.add( msg );
+					}
+					else
+					{
+						String
+							msg
+							= "unable to connect to server";
+						mOutputQueue.add( msg );
+					}
 				}
 				break;
-			default :
-				String msg = "unrecognized command";
+			default:
+				String
+					msg
+					= "unrecognized command: "
+					  + inputTokens[ 0 ];
 				mOutputQueue.add( msg );
 		}
 	}
 
-	private String[] parseInput(String input)
+	private
+	String[] parseInput( String input )
 	{
 		ArrayList<String>
-			          tokens = new ArrayList<String>();
-		StringBuilder sb     = new StringBuilder();
-		for( int i = 0; i < input.length(); i++ )
+			tokens
+			= new ArrayList<String>();
+		StringBuilder
+			sb
+			= new StringBuilder();
+		for (
+			int
+			i
+			= 0;
+			i
+			< input.length();
+			i++
+			)
 		{
-			if( input.charAt( i ) == ' ' )
+			if ( input.charAt( i )
+			     == ' ' )
 			{
 				tokens.add( sb.toString() );
 				sb.setLength( 0 );
@@ -93,6 +193,13 @@ class ApplicationController
 			}
 		}
 		tokens.add( sb.toString() );
-		return tokens.toArray( new String[tokens.size()] );
+		return tokens.toArray( new String[ tokens.size() ] );
+	}
+
+	public
+	void stop()
+	{
+		running
+			= false;
 	}
 }

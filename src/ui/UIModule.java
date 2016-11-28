@@ -9,8 +9,8 @@ public
 class UIModule
 {
 	/**
-	 * task that reads in user input from the
-	 * command line and adds it to a queue
+	 * task that reads in user input from the command line and adds
+	 * it to a queue
 	 */
 	private InputRetrievalTask
 		mInputRetrievalTask;
@@ -42,24 +42,31 @@ class UIModule
 	List<String>
 		mOutputQueue;
 
-	public UIModule()
-	{}
-
-	public void setUserInputQueue(
-		                             List<String> userInputQueue
-	                             )
+	public
+	UIModule()
 	{
-		mUserInputQueue = userInputQueue;
 	}
 
-	public void setOutputQueue(
-		                          List<String> outputQueue
-	                          )
+	public
+	void setUserInputQueue(
+		List<String> userInputQueue
+	                      )
 	{
-		mOutputQueue = outputQueue;
+		mUserInputQueue
+			= userInputQueue;
 	}
 
-	public void start()
+	public
+	void setOutputQueue(
+		List<String> outputQueue
+	                   )
+	{
+		mOutputQueue
+			= outputQueue;
+	}
+
+	public
+	void start()
 	{
 		// create the user input retrieval task
 		// and initialize it
@@ -81,7 +88,8 @@ class UIModule
 		mOutputDisplayThread.start();
 	}
 
-	public void stop()
+	public
+	void stop()
 	{
 		mInputRetrievalTask.stop();
 		mOutputDisplayTask.stop();

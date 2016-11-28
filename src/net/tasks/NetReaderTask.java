@@ -12,7 +12,8 @@ class NetReaderTask
 		running;
 
 	private
-	Connection mConnection;
+	Connection
+		mConnection;
 
 	private
 	List<String>
@@ -26,9 +27,9 @@ class NetReaderTask
 			= true;
 		while ( running )
 		{
-				mNetInQueue.add(
-					mConnection.receive()
-				               );
+			mNetInQueue.add(
+				mConnection.receive()
+			               );
 		}
 	}
 
@@ -44,5 +45,12 @@ class NetReaderTask
 	{
 		mConnection
 			= connection;
+	}
+
+	public
+	void stop()
+	{
+		running
+			= false;
 	}
 }

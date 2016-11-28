@@ -1,25 +1,31 @@
-
 import net.NetModule;
 import ui.UIModule;
+
 import java.util.LinkedList;
 import java.util.List;
 
 /**
- *
+ * a simple client prototype
  */
 public
 class ClientApplication
 {
-	private ApplicationController mApplicationController;
+	/**
+	 * controller containing the application logic
+	 */
+	private ApplicationController
+		mApplicationController;
 
 	/**
-	 * module encapsulating all the ui related
-	 * variables and functions
+	 * module containing all the ui related variables and
+	 * functions
 	 */
 	private
-	UIModule mUIModule;
+	UIModule
+		mUIModule;
 
-	private NetModule mNetModule;
+	private NetModule
+		mNetModule;
 
 	/**
 	 * queue of user input
@@ -45,10 +51,6 @@ class ClientApplication
 	private
 	List<String>
 		mNetOutQueue;
-	/**
-	 * crappy pseudo state variable
-	 */
-	private boolean running;
 
 	/**
 	 * constructor
@@ -67,15 +69,18 @@ class ClientApplication
 			= new LinkedList<String>();
 		// the modules
 		// ui
-		mUIModule = new UIModule();
+		mUIModule
+			= new UIModule();
 		mUIModule.setUserInputQueue( mUserInputQueue );
 		mUIModule.setOutputQueue( mOutputQueue );
 		// net
-		mNetModule = new NetModule();
-		mNetModule.setNetInQueue(mNetInQueue);
-		mNetModule.setNetOutQueue(mNetOutQueue);
+		mNetModule
+			= new NetModule();
+		mNetModule.setNetInQueue( mNetInQueue );
+		mNetModule.setNetOutQueue( mNetOutQueue );
 		// the application controller
-		mApplicationController = new ApplicationController( this );
+		mApplicationController
+			= new ApplicationController( this );
 		mApplicationController.setUserInputQueue( mUserInputQueue );
 		mApplicationController.setOutputQueue( mOutputQueue );
 	}
@@ -96,27 +101,10 @@ class ClientApplication
 	void startApplication()
 	{
 		mUIModule.start();
-		running = true;
-		while (running)
-		{
-			if(mUserInputQueue.isEmpty())
-			{
-				try
-				{
-					Thread.sleep( 666 );
-				}
-				catch ( InterruptedException e )
-				{
-					e.printStackTrace();
-				}
-			}
-			else
-			{
-				mApplicationController.handleInput(
-					mUserInputQueue.remove( 0 )
-				                                  );
-			}
-		}
+		Thread
+			thread
+			= new Thread( mApplicationController );
+		thread.start();
 		// initialize variables and launch pre-login task
 		// 1st prompt: enter host name and port number to connect to, or cancel
 		// 2nd prompt: enter user name and password to login, or cancel
@@ -129,11 +117,13 @@ class ClientApplication
 	public
 	void stopApplication()
 	{
-		running = false;
 		mUIModule.stop();
+		mApplicationController.stop();
 	}
 
-	public UIModule getUIModule()
+	// TODO replace get module methods with locator
+	public
+	UIModule getUIModule()
 	{
 		return mUIModule;
 	}

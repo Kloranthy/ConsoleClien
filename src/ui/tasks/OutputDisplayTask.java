@@ -5,7 +5,8 @@ public
 class OutputDisplayTask
 	implements Runnable
 {
-	private boolean running;
+	private boolean
+		running;
 	private
 	List<String>
 		mOutputQueue;
@@ -14,10 +15,11 @@ class OutputDisplayTask
 	public
 	void run()
 	{
-		running = true;
+		running
+			= true;
 		while ( running )
 		{
-			if( mOutputQueue.isEmpty())
+			if ( mOutputQueue.isEmpty() )
 			{
 				try
 				{
@@ -35,14 +37,17 @@ class OutputDisplayTask
 		}
 	}
 
-	public void stop()
+	public
+	void stop()
 	{
-		running = false;
+		running
+			= false;
 	}
 
 	public
 	void setOutputQueue( List<String> outputQueue )
 	{
-		mOutputQueue = outputQueue;
+		mOutputQueue
+			= outputQueue;
 	}
 }
